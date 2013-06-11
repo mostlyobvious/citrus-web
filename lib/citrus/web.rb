@@ -1,7 +1,10 @@
-require "citrus/web/version"
+require 'citrus/core'
+require 'webmachine'
 
 module Citrus
   module Web
-    # Your code goes here...
   end
 end
+
+require 'citrus/web/application'
+require 'citrus/web/github_push_resource'

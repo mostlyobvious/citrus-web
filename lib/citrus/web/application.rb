@@ -1,4 +1,4 @@
-require 'webmachine'
+require 'citrus/web'
 require 'webmachine/adapters/rack'
 
 module Citrus
@@ -12,10 +12,14 @@ module Citrus
           app.configure do |config|
             config.adapter = :Rack
           end
+
+          app.routes do
+            add ['github_push'], Citrus::Web::GithubPushResource
+          end
         end
       end
 
-      def adapter
+      def rack_application
         webmachine.adapter
       end
 
