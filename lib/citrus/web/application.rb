@@ -20,6 +20,7 @@ module Citrus
         @webmachine = Webmachine::Application.new
         configure_app
         subscribe_notifiers
+        start_background_tasks
       end
 
       def rack_application
@@ -27,6 +28,10 @@ module Citrus
       end
 
       protected
+
+      def start_background_tasks
+        queued_builder.start(concurrency = 1)
+      end
 
       def subscribe_notifiers
         execute_build_service.add_subscriber(log_subscriber)
