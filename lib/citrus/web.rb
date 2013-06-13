@@ -6,5 +6,7 @@ module Citrus
   end
 end
 
-require 'citrus/web/application'
+require 'citrus/web/resource'
+require 'citrus/web/resource_creator'
 require 'citrus/web/github_push_resource'
+require 'citrus/web/application'

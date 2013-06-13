@@ -1,12 +1,14 @@
 module Citrus
   module Web
-    class GithubPushResource < Webmachine::Resource
+    class GithubPushResource < Resource
       def allowed_methods
         %w(POST)
       end
 
       def process_post
-        github_adapter.create_changeset_from_push_data(request.body.to_s)
+        changeset = github_adapter.create_changeset_from_push_data(request.body.to_s)
+        build = Citrus::Core::Build.new(changeset)
+        queue.push(build)
         true
       end
 
