@@ -7,13 +7,13 @@ module Citrus
       attr_reader :queue, :queued_builder, :resource_creator, :execute_build_service, :workspace_builder, :test_runner, :configuration_loader, :log_subscriber
 
       def initialize
-        @log_subscriber        = LogSubscriber.new(Citrus::Web.log_root.join('build.log'))
+        @log_subscriber        = LogSubscriber.new(Web.log_root.join('build.log'))
         @queue                 = Queue.new
-        @test_runner           = Citrus::Core::TestRunner.new
-        @workspace_builder     = Citrus::Core::WorkspaceBuilder.new
-        @configuration_loader  = Citrus::Core::ConfigurationLoader.new
-        @execute_build_service = Citrus::Core::ExecuteBuildService.new(workspace_builder, configuration_loader, test_runner)
-        @queued_builder        = Citrus::Core::QueuedBuilder.new(execute_build_service, queue)
+        @test_runner           = Core::TestRunner.new
+        @workspace_builder     = Core::WorkspaceBuilder.new
+        @configuration_loader  = Core::ConfigurationLoader.new
+        @execute_build_service = Core::ExecuteBuildService.new(workspace_builder, configuration_loader, test_runner)
+        @queued_builder        = Core::QueuedBuilder.new(execute_build_service, queue)
         @resource_creator      = ResourceCreator.new(queue)
       end
 
@@ -24,7 +24,7 @@ module Citrus
             config.adapter = :Rack
           end
           webmachine.routes do
-            add ['github_push'], Citrus::Web::GithubPushResource
+            add ['github_push'], GithubPushResource
           end
           webmachine.dispatcher.resource_creator = resource_creator
           webmachine
