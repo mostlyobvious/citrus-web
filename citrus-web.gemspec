@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "citrus-core", "~> 0.0.1"
   spec.add_dependency "webmachine",  "~> 1.1"
-  spec.add_dependency "reel",        "= 0.3.0"
+  spec.add_dependency "puma",        "~> 2.0"
   spec.add_dependency "rb-kqueue",   "= 0.2.0"
   spec.add_dependency "rb-inotify",  "= 0.9.0"
 

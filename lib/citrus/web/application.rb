@@ -4,8 +4,7 @@ module Citrus
   module Web
     class Application
 
-      attr_reader :queue, :queued_builder, :resource_creator, :execute_build_service, :workspace_builder,
-                  :test_runner, :configuration_loader, :log_subscriber
+      attr_reader :queue, :queued_builder, :resource_creator, :execute_build_service, :workspace_builder, :test_runner, :configuration_loader, :log_subscriber
 
       def initialize
         @log_subscriber        = LogSubscriber.new(Web.log_root.join('build.log'))
@@ -22,7 +21,7 @@ module Citrus
         @webmachine ||= begin
           webmachine = Webmachine::Application.new
           webmachine.configure do |config|
-            config.adapter = :Reel
+            config.adapter = :Rack
           end
           webmachine.routes do
             add ['github_push'], GithubPushResource
@@ -33,10 +32,13 @@ module Citrus
         end
       end
 
+      def rack_application
+        webmachine.adapter
+      end
+
       def start
         subscribe_notifiers
         start_background_tasks
-        webmachine.run
       end
 
       protected
