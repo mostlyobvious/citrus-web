@@ -22,6 +22,7 @@ end
 require 'citrus/web/resource'
 require 'citrus/web/resource_creator'
 require 'citrus/web/filesystem_events_notifier'
+require 'citrus/web/poller'
 require 'citrus/web/file_streamer'
 require 'citrus/web/github_push_resource'
 require 'citrus/web/build_console_resource'

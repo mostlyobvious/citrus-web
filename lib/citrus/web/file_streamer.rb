@@ -2,11 +2,12 @@ module Citrus
   module Web
     class FileStreamer
 
-      attr_reader :path, :notifier
+      attr_reader :path, :notifier, :poller
 
-      def initialize(path, notifier = FilesystemEventsNotifier.new)
+      def initialize(path, notifier = FilesystemEventsNotifier.new, poller = Poller.new)
         @path = path
         @notifier = notifier
+        @poller = poller
       end
 
       def stream(&block)
@@ -21,15 +22,9 @@ module Citrus
         end
 
         loop do
-          wait_readable
+          poller.wait_readable(notifier.to_io)
           notifier.process
         end
-      end
-
-      protected
-
-      def wait_readable
-        Celluloid::IO.wait_readable(notifier.to_io)
       end
 
     end
