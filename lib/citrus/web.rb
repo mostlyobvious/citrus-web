@@ -1,6 +1,6 @@
 require 'citrus/core'
 require 'webmachine'
-require 'webmachine/adapters/rack'
+require 'reel'
 require 'thread'
 
 module Citrus
