@@ -1,6 +1,7 @@
 module Citrus
   module Web
     class GithubPushResource < Resource
+
       def allowed_methods
         %w(POST)
       end
@@ -20,6 +21,7 @@ module Citrus
       def github_adapter
         Core::GithubAdapter.new
       end
+
     end
   end
 end

@@ -26,6 +26,7 @@ module Citrus
           end
           webmachine.routes do
             add ['github_push'], GithubPushResource
+            add ['builds', :build_id, 'console'], BuildConsoleResource
           end
           webmachine.dispatcher.resource_creator = resource_creator
           webmachine

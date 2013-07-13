@@ -22,5 +22,6 @@ end
 require 'citrus/web/resource'
 require 'citrus/web/resource_creator'
 require 'citrus/web/github_push_resource'
+require 'citrus/web/build_console_resource'
 require 'citrus/web/log_subscriber'
 require 'citrus/web/application'
