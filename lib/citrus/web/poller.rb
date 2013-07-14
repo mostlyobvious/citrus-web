@@ -14,7 +14,7 @@ module Citrus
       protected
 
       def setup_poller
-        if defined?(:Reel)
+        if defined?(Reel)
           require 'citrus/web/celluloid_io_poller'
           CelluloidIOPoller.new
         else
