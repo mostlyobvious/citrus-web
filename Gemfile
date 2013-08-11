@@ -4,3 +4,4 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'citrus-core', github: 'pawelpacana/citrus-core'
+gem 'webmachine',  github: 'seancribbs/webmachine-ruby'
