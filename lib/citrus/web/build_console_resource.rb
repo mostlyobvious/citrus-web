@@ -12,7 +12,7 @@ module Citrus
       end
 
       def allowed_methods
-        %W[GET]
+        %w(GET)
       end
 
       def content_types_provided
