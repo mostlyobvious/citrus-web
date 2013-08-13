@@ -8,7 +8,9 @@ module Citrus
 
       def process_post
         _, data = URI.decode_www_form(request.body.to_s).first
-        queue.push(create_build_service.create_from_github_push(data))
+        changeset = github_adapter.create_changeset_from_push_data(data)
+        build = Core::Build.new(changeset)
+        queue.push(build)
         true
       end
 
@@ -16,8 +18,8 @@ module Citrus
         true
       end
 
-      def create_build_service
-        Citrus::Core::CreateBuildService.new
+      def github_adapter
+        Core::GithubAdapter.new
       end
 
     end
