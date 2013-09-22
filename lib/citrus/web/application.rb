@@ -12,7 +12,7 @@ module Citrus
         @test_runner           = Core::TestRunner.new
         @workspace_builder     = Core::WorkspaceBuilder.new
         @configuration_loader  = Core::ConfigurationLoader.new
-        @execute_build_service = Core::ExecuteBuildService.new(workspace_builder, configuration_loader, test_runner)
+        @execute_build_service = Core::ExecuteBuildUsecase.new(workspace_builder, configuration_loader, test_runner)
         @queued_builder        = Core::QueuedBuilder.new(execute_build_service, queue)
         @resource_creator      = ResourceCreator.new(queue)
       end
