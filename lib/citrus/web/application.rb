@@ -1,5 +1,3 @@
-require 'citrus/web'
-
 module Citrus
   module Web
     class Application
