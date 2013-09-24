@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "webmachine-test", "~> 0.2.1"
   spec.add_development_dependency "rspec", "~> 2.13"
   spec.add_development_dependency "bogus", "~> 0.1"
+  spec.add_development_dependency "coveralls", "~> 0.7"
 end

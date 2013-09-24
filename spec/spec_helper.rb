@@ -11,4 +11,7 @@ Bogus.configure do |config|
   config.search_modules << Citrus::Web
 end
 
-
+if ENV['CI']
+  require 'coveralls'
+  Coveralls.wear!
+end
