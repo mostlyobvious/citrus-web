@@ -14,6 +14,8 @@ module Citrus
       let(:build_executor)       { ThreadedBuildExecutor.new(execute_build, build_queue) }
       let(:resource_creator)     { ResourceCreator.new(self) }
       let(:github_adapter)       { Core::GithubAdapter.new }
+      let(:create_build)         { CreateBuild.new(builds_repository, build_queue) }
+      let(:builds_repository)    { BuildsRepository.new }
 
     end
   end
