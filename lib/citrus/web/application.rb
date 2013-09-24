@@ -2,19 +2,10 @@ module Citrus
   module Web
     class Application
 
-      attr_reader :queue, :queued_builder, :resource_creator, :execute_build_service,
-        :workspace_builder, :test_runner, :configuration_loader, :log_subscriber
+      extend Dependor::Injectable
+      inject :resource_creator
 
-      def initialize
-        @log_subscriber        = LogSubscriber.new(Web.log_root.join('build.log'))
-        @queue                 = Queue.new
-        @test_runner           = Core::TestRunner.new
-        @workspace_builder     = Core::WorkspaceBuilder.new
-        @configuration_loader  = Core::ConfigurationLoader.new
-        @execute_build_service = Core::ExecuteBuildUsecase.new(workspace_builder, configuration_loader, test_runner)
-        @queued_builder        = Core::QueuedBuilder.new(execute_build_service, queue)
-        @resource_creator      = ResourceCreator.new(queue)
-      end
+      takes :configuration
 
       def webmachine
         @webmachine ||= begin
@@ -36,18 +27,13 @@ module Citrus
       end
 
       def start
-        subscribe_notifiers
-        start_background_tasks
+        build_executor.start
       end
 
       protected
 
-      def start_background_tasks
-        queued_builder.start(concurrency = 1)
-      end
-
-      def subscribe_notifiers
-        execute_build_service.add_subscriber(log_subscriber)
+      def injector
+        Injector.new(configuration)
       end
 
     end

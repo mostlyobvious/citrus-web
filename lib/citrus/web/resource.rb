@@ -2,7 +2,9 @@ module Citrus
   module Web
     class Resource < Webmachine::Resource
 
-      attr_accessor :queue
+      extend Dependor::Injectable
+      attr_accessor :injector
+      protected     :injector
 
       def handle_exception(error)
         $stderr.puts error

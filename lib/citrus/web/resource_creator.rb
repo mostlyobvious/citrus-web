@@ -2,15 +2,11 @@ module Citrus
   module Web
     class ResourceCreator
 
-      attr_reader :queue
-
-      def initialize(queue)
-        @queue = queue
-      end
+      takes :injector
 
       def call(route, request, response)
         resource = route.resource.new(request, response)
-        resource.queue = queue
+        resource.injector = injector
         resource
       end
 

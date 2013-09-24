@@ -21,7 +21,9 @@ module Citrus
   end
 end
 
+require 'citrus/web/injector'
 require 'citrus/web/resource'
+require 'citrus/web/configuration'
 require 'citrus/web/resource_creator'
 require 'citrus/web/filesystem_events_notifier'
 require 'citrus/web/poller'
@@ -30,3 +32,5 @@ require 'citrus/web/github_push_resource'
 require 'citrus/web/build_console_resource'
 require 'citrus/web/log_subscriber'
 require 'citrus/web/application'
+require 'citrus/web/file_output'
+require 'citrus/web/threaded_build_executor'

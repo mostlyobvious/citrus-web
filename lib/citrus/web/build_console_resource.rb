@@ -20,7 +20,8 @@ module Citrus
       end
 
       def render_event
-        build    = Core::Build.new(nil, SecureRandom.uuid, Core::FileOutput.new('dummy.log', Pathname.new('/tmp')))
+        file     = File.new('/tmp/citrus/dummy.log', 'w')
+        build    = Core::Build.new(nil, SecureRandom.uuid, FileOutput.new(file))
         streamer = FileStreamer.new(build.output.path.to_s)
 
         Fiber.new { streamer.stream { |data| Fiber.yield(data) } }
