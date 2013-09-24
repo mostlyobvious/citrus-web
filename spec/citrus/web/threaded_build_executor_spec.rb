@@ -13,7 +13,7 @@ describe Citrus::Web::ThreadedBuildExecutor do
 
       build_queue.push(build)
       build_executor.start
-      expect(execute_build).to have_received.start(build)
+      expect(execute_build).to have_received.call(build)
     end
 
     it 'should start given number of workers' do

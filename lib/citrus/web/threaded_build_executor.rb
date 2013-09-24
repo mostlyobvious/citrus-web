@@ -7,7 +7,7 @@ module Citrus
       def start(concurrency = 1)
         concurrency.times do
           worker_thread = Thread.new do
-            loop { execute_build.start(build_queue.pop) }
+            loop { execute_build.(build_queue.pop) }
           end
           workers << worker_thread
         end
