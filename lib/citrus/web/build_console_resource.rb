@@ -2,11 +2,9 @@ module Citrus
   module Web
     class BuildConsoleResource < Resource
 
-      def initialize
-        set_headers
-      end
+      inject :builds_repository
 
-      def set_headers
+      def initialize
         response.headers['Connection']    ||= 'keep-alive'
         response.headers['Cache-Control'] ||= 'no-cache'
       end
@@ -19,10 +17,16 @@ module Citrus
         [['text/event-stream', :render_event]]
       end
 
+      def resource_exists?
+        builds_repository.find_by_uuid(request.path_info[:build_id])
+        true
+      rescue BuildsRepository::NotFound
+        false
+      end
+
       def render_event
-        file     = File.new('/tmp/citrus/dummy.log', 'w')
-        build    = Core::Build.new(nil, SecureRandom.uuid, FileOutput.new(file))
-        streamer = FileStreamer.new(build.output.path.to_s)
+        build    = builds_repository.find_by_uuid(request.path_info[:build_id])
+        streamer = FileStreamer.new(build.output.path)
 
         Fiber.new { streamer.stream { |data| Fiber.yield(data) } }
       end
