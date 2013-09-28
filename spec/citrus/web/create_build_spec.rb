@@ -13,7 +13,6 @@ describe Citrus::Web::CreateBuild do
     before do
       stub(builds_repository).create_build(any_args) { build  }
       stub(Citrus::Web::FileOutput).new(any_args)    { output }
-      # XXX: change the line above to check in create build: some_arg.tap { |x| x.is_a?(TestOutput) }
       create_build.(changeset)
     end
 
