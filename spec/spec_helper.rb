@@ -1,8 +1,8 @@
 require 'citrus/web'
-require 'webmachine/test'
+require 'test_application'
 
 RSpec.configure do |config|
-  config.include Webmachine::Test
+  config.include Citrus::Web::TestApplication
   config.order = 'random'
 end
 
@@ -15,3 +15,5 @@ if ENV['CI']
   require 'coveralls'
   Coveralls.wear!
 end
+
+
