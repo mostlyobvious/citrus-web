@@ -25,7 +25,7 @@ describe Citrus::Web::BuildConsoleResource do
         file.flush
 
         Webmachine::ChunkedBody.new(subject.body).each do |chunk|
-          expect(chunk).to eq("4\r\nkaka\r\n")
+          expect(chunk).to eq("c\r\ndata: kaka\n\n\r\n")
           break
         end
       end
@@ -38,7 +38,7 @@ describe Citrus::Web::BuildConsoleResource do
         end
 
         Webmachine::ChunkedBody.new(subject.body).each do |chunk|
-          expect(chunk).to eq("4\r\nkaka\r\n")
+          expect(chunk).to eq("c\r\ndata: kaka\n\n\r\n")
           break
         end
       end
