@@ -16,6 +16,10 @@ module Citrus
       let(:github_adapter)       { Core::GithubAdapter.new }
       let(:create_build)         { CreateBuild.new(builds_repository, build_queue) }
       let(:builds_repository)    { BuildsRepository.new }
+      let(:pubsub_publisher)     { PubSubAdapter::Publisher.new }
+      let(:pubsub_subscriber)    { PubSubAdapter::Subscriber.new }
+      let(:publish_events)       { PublishEvents.new(pubsub_publisher) }
+      let(:subscribe_events)     { SubscribeEvents.new(pubsub_subscriber) }
 
     end
   end
