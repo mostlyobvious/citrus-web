@@ -18,9 +18,15 @@ module Citrus
       end
 
       def render_event
-        subscribe_events.('event') do |event|
-          # XXX: stream received event
+        Fiber.new do
+          subscribe_events.('event') do |event|
+            Fiber.yield(encode_sse(event))
+          end
         end
+      end
+
+      def encode_sse(data)
+        "data: #{data.strip}\n\n"
       end
 
     end

@@ -16,9 +16,15 @@ describe Citrus::Web::EventBusResource do
       specify { expect(subject.headers['Cache-Control']).to eq('no-cache') }
 
       it 'should subscribe to events' do
-        subject
-        stub(subscribe_events).call(any_args)
-        expect(subscribe_events).to have_received.call('event')
+        mock(subscribe_events).call('event')
+        stream_body { |chunk| break }
+      end
+
+      it 'should stream published events' do
+        pending 'how one does stub blocks?'
+        stub(subscribe_events).call('event')
+        chunk = stream_body { |chunk| break(chunk) }
+        expect(chunk).to eq("d\r\ndata: event\n\n\r\n")
       end
     end
   end

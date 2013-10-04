@@ -20,6 +20,12 @@ module Citrus
         @injector ||= Injector.new(configuration)
       end
 
+      def stream_body(response = subject)
+        Webmachine::ChunkedBody.new(response.body).each do |chunk|
+          yield chunk
+        end
+      end
+
     end
   end
 end

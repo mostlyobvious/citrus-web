@@ -24,10 +24,8 @@ describe Citrus::Web::BuildConsoleResource do
         file.write('kaka')
         file.flush
 
-        Webmachine::ChunkedBody.new(subject.body).each do |chunk|
-          expect(chunk).to eq("c\r\ndata: kaka\n\n\r\n")
-          break
-        end
+        chunk = stream_body { |chunk| break chunk }
+        expect(chunk).to eq("c\r\ndata: kaka\n\n\r\n")
       end
 
       it 'should stream output data as its written' do
@@ -37,10 +35,8 @@ describe Citrus::Web::BuildConsoleResource do
           file.flush
         end
 
-        Webmachine::ChunkedBody.new(subject.body).each do |chunk|
-          expect(chunk).to eq("c\r\ndata: kaka\n\n\r\n")
-          break
-        end
+        chunk = stream_body { |chunk| break chunk }
+        expect(chunk).to eq("c\r\ndata: kaka\n\n\r\n")
       end
     end
 
