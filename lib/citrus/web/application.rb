@@ -3,7 +3,7 @@ module Citrus
     class Application
 
       extend Dependor::Injectable
-      inject :resource_creator
+      inject :resource_creator, :build_executor
 
       takes :configuration
 
