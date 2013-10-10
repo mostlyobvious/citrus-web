@@ -3,8 +3,13 @@ require 'spec_helper'
 describe Citrus::Web::EventBusResource do
 
   let(:subscribe_events) { fake(:subscribe_events) }
+  let(:event_presenter)  { fake(:event_presenter) }
+  let(:event)            { fake(:event) }
 
-  before { stub(injector).subscribe_events { subscribe_events } }
+  before do
+    stub(injector).subscribe_events { subscribe_events }
+    stub(injector).event_presenter  { event_presenter  }
+  end
 
   context 'GET /events' do
     context 'successfull' do
@@ -21,10 +26,19 @@ describe Citrus::Web::EventBusResource do
       end
 
       it 'should stream published events' do
-        pending 'how one does stub blocks?'
-        stub(subscribe_events).call('event')
+        pending 'waiting on https://github.com/psyho/bogus/issues/44'
+
+        stub(subscribe_events).call('event') # yield event
         chunk = stream_body { |chunk| break(chunk) }
-        expect(chunk).to eq("d\r\ndata: event\n\n\r\n")
+        expect(chunk).to eq("d\r\ndata: #{JSON.dump(event)}\n\n\r\n")
+      end
+
+      it 'should format events using presenter' do
+        pending 'waiting on https://github.com/psyho/bogus/issues/44'
+
+        stub(subscribe_events).call('event') # yield event
+        mock(event_presenter).call(event)
+        stream_body { |chunk| break }
       end
     end
   end

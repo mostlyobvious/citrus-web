@@ -20,6 +20,7 @@ module Citrus
       let(:pubsub_subscriber)    { PubSubAdapter::Subscriber.new }
       let(:publish_events)       { PublishEvents.new(pubsub_publisher) }
       let(:subscribe_events)     { SubscribeEvents.new(pubsub_subscriber) }
+      let(:event_presenter)      { EventPresenter.new }
 
     end
   end

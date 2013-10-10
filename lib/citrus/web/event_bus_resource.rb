@@ -1,8 +1,10 @@
+require 'json'
+
 module Citrus
   module Web
     class EventBusResource < Resource
 
-      inject :subscribe_events
+      inject :subscribe_events, :event_presenter
 
       def initialize
         response.headers['Connection']    ||= 'keep-alive'
@@ -20,7 +22,8 @@ module Citrus
       def render_event
         Fiber.new do
           subscribe_events.('event') do |event|
-            Fiber.yield(encode_sse(event))
+            event_data = event_presenter.(event)
+            Fiber.yield(encode_sse(JSON.dump(event_data)))
           end
         end
       end
