@@ -22,5 +22,18 @@ describe Citrus::Web::Injector do
     specify { expect{injector.publish_events}.to_not       raise_error }
     specify { expect{injector.subscribe_events}.to_not     raise_error }
     specify { expect{injector.event_presenter}.to_not      raise_error }
+    specify { expect{injector.clock}.to_not                raise_error }
   end
+
+  it 'should wire event_subscriber to execute_build instances' do
+    event_subscriber = fake(:event_subscriber)
+    execute_build    = fake(:execute_build) { Citrus::Core::ExecuteBuild }
+
+    stub(Citrus::Core::ExecuteBuild).new(any_args) { execute_build }
+    stub(injector).event_subscriber                { event_subscriber }
+
+    injector.execute_build.inspect
+    expect(execute_build).to have_received.add_subscriber(event_subscriber)
+  end
+
 end
