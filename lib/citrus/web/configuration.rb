@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module Citrus
   module Web
     class Configuration
@@ -14,6 +16,10 @@ module Citrus
 
       def build_root
         File.join(root, 'builds')
+      end
+
+      def pubsub_address
+        'inproc://citrus_pubsub_' << SecureRandom.hex
       end
 
     end

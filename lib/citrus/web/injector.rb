@@ -18,17 +18,11 @@ module Citrus
       let(:github_adapter)       { Core::GithubAdapter.new }
       let(:create_build)         { CreateBuild.new(builds_repository, build_queue) }
       let(:builds_repository)    { BuildsRepository.new }
-      let(:pubsub_publisher)     { NanoPubsubAdapter::Publisher.new(pubsub_address) }
-      let(:pubsub_subscriber)    { NanoPubsubAdapter::Subscriber.new(pubsub_address) }
+      let(:pubsub_publisher)     { NanoPubsubAdapter::Publisher.new(configuration.pubsub_address) }
+      let(:pubsub_subscriber)    { NanoPubsubAdapter::Subscriber.new(configuration.pubsub_address) }
       let(:publish_events)       { PublishEvents.new(pubsub_publisher) }
       let(:subscribe_events)     { SubscribeEvents.new(pubsub_subscriber) }
       let(:event_presenter)      { EventPresenter.new }
-
-      protected
-
-      def pubsub_address
-        'inproc://citrus_pubsub_' << SecureRandom.hex
-      end
 
     end
   end

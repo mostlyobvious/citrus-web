@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Citrus::Web::Injector do
 
   let(:injector)      { described_class.new(configuration) }
-  let(:configuration) { fake(:configuration) }
+  let(:configuration) { Citrus::Web::Configuration.new('/tmp/citrus') }
 
   context 'it should be able to create injected objects instances' do
     specify { expect{injector.build_queue}.to_not          raise_error }
