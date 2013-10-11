@@ -14,7 +14,7 @@ module Citrus
       end
 
       def watch(*args, &block)
-        notifier.watch_file(*args, &block)
+        notifier.watch_file(*args.map { |arg| arg == :modify ? :write : arg }, &block)
       end
 
       def to_io

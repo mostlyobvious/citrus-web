@@ -15,7 +15,7 @@ module Citrus
         yield file.read
         position = file.stat.size
 
-        notifier.watch(path, :write) do
+        notifier.watch(path, :modify) do
           file.seek(position)
           yield file.read
           position = file.stat.size

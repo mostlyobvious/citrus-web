@@ -8,7 +8,7 @@ module Citrus
       def_delegators :poller, :wait_readable, :wait_writable
 
       def initialize
-        @poller = setup_poller
+  @poller = setup_poller
       end
 
       protected

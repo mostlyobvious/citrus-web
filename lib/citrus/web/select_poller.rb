@@ -3,11 +3,11 @@ module Citrus
     class SelectPoller
 
       def wait_readable(io)
-        Kernel.select([io])
+        IO.select([io])
       end
 
       def wait_writable(io)
-        Kernel.select([], [io])
+        IO.select([], [io])
       end
 
     end
