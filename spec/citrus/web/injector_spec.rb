@@ -2,9 +2,10 @@ require 'spec_helper'
 
 describe Citrus::Web::Injector do
 
-  let(:injector)      { described_class.new(configuration, build_queue) }
-  let(:configuration) { Citrus::Web::Configuration.new('/tmp/citrus') }
-  let(:build_queue)   { fake(:queue) }
+  let(:injector)          { described_class.new(configuration, build_queue, builds_repository) }
+  let(:configuration)     { Citrus::Web::Configuration.new('/tmp/citrus') }
+  let(:build_queue)       { fake(:queue) }
+  let(:builds_repository) { fake(:builds_repository) }
 
   context 'it should be able to create injected objects instances' do
     specify { expect{injector.test_runner}.to_not          raise_error }
@@ -16,7 +17,6 @@ describe Citrus::Web::Injector do
     specify { expect{injector.resource_creator}.to_not     raise_error }
     specify { expect{injector.github_adapter}.to_not       raise_error }
     specify { expect{injector.create_build}.to_not         raise_error }
-    specify { expect{injector.builds_repository}.to_not    raise_error }
     specify { expect{injector.pubsub_publisher}.to_not     raise_error }
     specify { expect{injector.pubsub_subscriber}.to_not    raise_error }
     specify { expect{injector.publish_events}.to_not       raise_error }

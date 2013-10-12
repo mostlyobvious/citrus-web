@@ -5,7 +5,7 @@ module Citrus
     class Injector
       extend Dependor::Let
 
-      takes :configuration, :build_queue
+      takes :configuration, :build_queue, :builds_repository
 
       let(:test_runner)          { Core::TestRunner.new }
       let(:code_fetcher)         { Core::CachedCodeFetcher.new(configuration.cache_root) }
@@ -16,7 +16,6 @@ module Citrus
       let(:resource_creator)     { ResourceCreator.new(self) }
       let(:github_adapter)       { Core::GithubAdapter.new }
       let(:create_build)         { CreateBuild.new(builds_repository, build_queue) }
-      let(:builds_repository)    { BuildsRepository.new }
       let(:pubsub_publisher)     { NanoPubsubAdapter::Publisher.new(configuration.pubsub_address) }
       let(:pubsub_subscriber)    { NanoPubsubAdapter::Subscriber.new(configuration.pubsub_address) }
       let(:publish_events)       { PublishEvents.new(pubsub_publisher) }

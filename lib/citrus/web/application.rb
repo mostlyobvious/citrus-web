@@ -5,7 +5,13 @@ module Citrus
       extend Dependor::Injectable
       inject :resource_creator, :build_executor
 
-      takes :configuration
+      attr_reader :configuration, :build_queue, :builds_repository
+
+      def initialize(configuration, build_queue = Queue.new, builds_repository = BuildsRepository.new)
+        @configuration     = configuration
+        @build_queue       = build_queue
+        @builds_repository = builds_repository
+      end
 
       def webmachine
         @webmachine ||= begin
@@ -34,11 +40,7 @@ module Citrus
       protected
 
       def injector
-        Injector.new(configuration, queue)
-      end
-
-      def queue
-        @queue ||= Queue.new
+        Injector.new(configuration, build_queue, builds_repository)
       end
 
     end
