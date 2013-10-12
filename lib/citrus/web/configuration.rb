@@ -19,7 +19,7 @@ module Citrus
       end
 
       def pubsub_address
-        'inproc://citrus_pubsub_' << SecureRandom.hex
+        'ipc:///tmp/citrus_pubsub.ipc'
       end
 
     end
