@@ -1,5 +1,5 @@
 require 'citrus/web'
-require 'test_application'
+require 'support/test_application'
 
 RSpec.configure do |config|
   config.include Citrus::Web::TestApplication
