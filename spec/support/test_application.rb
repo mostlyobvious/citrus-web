@@ -17,11 +17,7 @@ module Citrus
       end
 
       def injector
-        @injector ||= Injector.new(configuration, queue)
-      end
-
-      def queue
-        fake(:queue)
+        @injector ||= fake(:injector)
       end
 
       def stream_body(response = subject)
