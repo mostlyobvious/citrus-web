@@ -5,8 +5,11 @@ module Citrus
     class FileOutput < Core::TestOutput
       extend Forwardable
 
-      takes :file
-      def_delegators :file, :path
+      attr_reader :path
+
+      def initialize(file)
+        @path = file.path
+      end
 
       def read
         File.read(path)
