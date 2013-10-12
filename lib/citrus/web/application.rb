@@ -34,7 +34,11 @@ module Citrus
       protected
 
       def injector
-        Injector.new(configuration)
+        Injector.new(configuration, queue)
+      end
+
+      def queue
+        @queue ||= Queue.new
       end
 
     end

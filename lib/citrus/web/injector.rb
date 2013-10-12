@@ -3,11 +3,10 @@ require 'securerandom'
 module Citrus
   module Web
     class Injector
-      include Dependor::Let
+      extend Dependor::Let
 
-      takes :configuration
+      takes :configuration, :build_queue
 
-      let(:build_queue)          { Queue.new }
       let(:test_runner)          { Core::TestRunner.new }
       let(:code_fetcher)         { Core::CachedCodeFetcher.new(configuration.cache_root) }
       let(:workspace_builder)    { Core::WorkspaceBuilder.new(configuration.build_root, code_fetcher) }
