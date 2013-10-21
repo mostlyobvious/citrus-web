@@ -2,19 +2,14 @@ module Citrus
   module Web
     class BuildConsoleResource < Resource
 
-      inject :builds_repository
-
-      def initialize
-        response.headers['Connection']    ||= 'keep-alive'
-        response.headers['Cache-Control'] ||= 'no-cache'
-      end
+      inject :builds_repository, :configuration
 
       def allowed_methods
         %w(GET)
       end
 
       def content_types_provided
-        [['text/event-stream', :render_event]]
+        [['text/html', :render_html]]
       end
 
       def resource_exists?
@@ -24,19 +19,12 @@ module Citrus
         false
       end
 
-      def render_event
-        build    = builds_repository.find_by_uuid(request.path_info[:build_id])
-        streamer = FileStreamer.new(build.output.path)
-
-        Fiber.new do
-          streamer.stream do |data|
-            Fiber.yield(encode_sse(data)) unless data.empty?
-          end
-        end
+      def render_html
+        301
       end
 
-      def encode_sse(data)
-        "data: #{data.strip}\n\n"
+      def finish_request
+        response.headers['Location'] = configuration.streamer_url
       end
 
     end

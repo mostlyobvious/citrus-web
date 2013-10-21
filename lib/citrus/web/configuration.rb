@@ -4,11 +4,7 @@ module Citrus
   module Web
     class Configuration
 
-      attr_reader :root
-
-      def initialize(root)
-        @root = root
-      end
+      takes :root, :streamer_url
 
       def cache_root
         File.join(root, 'cache')

@@ -13,17 +13,15 @@ module Citrus
       end
 
       def configuration
-        @configuration ||= Configuration.new(Dir.mktmpdir('citrus'))
+        @configuration ||= Configuration.new(Dir.mktmpdir('citrus'), streamer_url)
       end
 
       def injector
         @injector ||= fake(:injector)
       end
 
-      def stream_body(response = subject)
-        Webmachine::ChunkedBody.new(response.body).each do |chunk|
-          yield chunk
-        end
+      def streamer_url
+        'http://stream.citrus-ci.dev'
       end
 
     end

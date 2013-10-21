@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Citrus::Web::Injector do
 
   let(:injector)          { described_class.new(configuration, build_queue, builds_repository) }
-  let(:configuration)     { Citrus::Web::Configuration.new('/tmp/citrus') }
+  let(:configuration)     { Citrus::Web::Configuration.new('/tmp/citrus', 'http://stream.citrus-ci.dev') }
   let(:build_queue)       { fake(:queue) }
   let(:builds_repository) { fake(:builds_repository) }
 
