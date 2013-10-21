@@ -6,6 +6,13 @@ describe Citrus::Web::Injector do
   let(:configuration)     { Citrus::Web::Configuration.new('/tmp/citrus', 'http://stream.citrus-ci.dev') }
   let(:build_queue)       { fake(:queue) }
   let(:builds_repository) { fake(:builds_repository) }
+  let(:zmq_context)       { fake(:context) { ZMQ::Context } }
+  let(:zmq_socket)        { fake(:socket)  { ZMQ::Socket  } }
+
+  before do
+    stub(zmq_context).socket(any_args) { zmq_socket  }
+    stub(injector).zmq_context         { zmq_context }
+  end
 
   context 'it should be able to create injected objects instances' do
     specify { expect{injector.test_runner}.to_not          raise_error }
@@ -18,9 +25,7 @@ describe Citrus::Web::Injector do
     specify { expect{injector.github_adapter}.to_not       raise_error }
     specify { expect{injector.create_build}.to_not         raise_error }
     specify { expect{injector.pubsub_publisher}.to_not     raise_error }
-    specify { expect{injector.pubsub_subscriber}.to_not    raise_error }
     specify { expect{injector.publish_events}.to_not       raise_error }
-    specify { expect{injector.subscribe_events}.to_not     raise_error }
     specify { expect{injector.event_presenter}.to_not      raise_error }
     specify { expect{injector.clock}.to_not                raise_error }
   end

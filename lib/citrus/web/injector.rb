@@ -16,13 +16,19 @@ module Citrus
       let(:resource_creator)     { ResourceCreator.new(self) }
       let(:github_adapter)       { Core::GithubAdapter.new }
       let(:create_build)         { CreateBuild.new(builds_repository, build_queue) }
-      let(:pubsub_publisher)     { NanoPubsubAdapter::Publisher.new(configuration.pubsub_address) }
-      let(:pubsub_subscriber)    { NanoPubsubAdapter::Subscriber.new(configuration.pubsub_address) }
+      let(:pubsub_publisher)     { ZmqPubsubAdapter::Publisher.new(configuration.pubsub_address, pubsub_serializer, zmq_context) }
       let(:publish_events)       { PublishEvents.new(pubsub_publisher) }
-      let(:subscribe_events)     { SubscribeEvents.new(pubsub_subscriber) }
       let(:event_presenter)      { EventPresenter.new }
       let(:event_subscriber)     { EventSubscriber.new(publish_events, clock) }
       let(:clock)                { Clock.new }
+
+      def pubsub_serializer
+        Marshal
+      end
+
+      def zmq_context
+        @zmq_context ||= ZMQ::Context.new
+      end
 
     end
   end

@@ -1,42 +1,23 @@
-require 'nanomsg'
+require 'ffi-rzmq'
 
 module Citrus
   module Web
-    module NanoPubsubAdapter
+    module ZmqPubsubAdapter
       class Publisher
 
-        attr_reader :socket, :address, :serializer
+        attr_reader :socket, :address, :serializer, :context
 
-        def initialize(address, serializer = Marshal)
+        def initialize(address, serializer = Marshal, context = ZMQ::Context.new)
           @address    = address
-          @socket     = NanoMsg::PubSocket.new
+          @context    = context
+          @socket     = context.socket(ZMQ::PUB)
           @serializer = serializer
+          socket.setsockopt(::ZMQ::LINGER, 100)
           socket.bind(address)
         end
 
         def publish(subject, message)
-          socket.send("#{subject} #{serializer.dump(message)}")
-        end
-
-      end
-
-      class Subscriber
-
-        attr_reader :socket, :address, :serializer
-
-        def initialize(address, serializer = Marshal)
-          @address    = address
-          @socket     = NanoMsg::SubSocket.new
-          @serializer = serializer
-          socket.connect(address)
-        end
-
-        def subscribe(subject, &block)
-          socket.subscribe(subject)
-          loop do
-            _, message = socket.recv.split(' ', 2)
-            block.call(serializer.load(message))
-          end
+          socket.send_string("#{subject} #{serializer.dump(message)}")
         end
 
       end
