@@ -1,16 +1,6 @@
 language: ruby
 before_install:
-  - export nanomsgver=0.2-alpha
-  - export nanomsgbuild=`mktemp -d`
-  - pushd $nanomsgbuild
-  - wget http://download.nanomsg.org/nanomsg-${nanomsgver}.tar.gz
-  - tar xfz nanomsg-${nanomsgver}.tar.gz
-  - cd nanomsg-${nanomsgver}
-  - ./configure
-  - make
-  - sudo make install
-  - popd
-  - sudo ldconfig
+  - sudo apt-get install -qq libzmq3-dev
 rvm:
   - 1.9.3
   - 2.0.0
