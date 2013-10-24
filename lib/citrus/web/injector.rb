@@ -1,4 +1,5 @@
 require 'securerandom'
+require 'json'
 
 module Citrus
   module Web
@@ -17,13 +18,13 @@ module Citrus
       let(:github_adapter)       { Core::GithubAdapter.new }
       let(:create_build)         { CreateBuild.new(builds_repository, build_queue) }
       let(:pubsub_publisher)     { ZmqPubsubAdapter::Publisher.new(configuration.pubsub_address, pubsub_serializer, zmq_context) }
-      let(:publish_events)       { PublishEvents.new(pubsub_publisher) }
+      let(:publish_events)       { PublishEvents.new(pubsub_publisher, event_presenter) }
       let(:event_presenter)      { EventPresenter.new }
       let(:event_subscriber)     { EventSubscriber.new(publish_events, clock) }
       let(:clock)                { Clock.new }
 
       def pubsub_serializer
-        Marshal
+        JSON
       end
 
       def zmq_context
