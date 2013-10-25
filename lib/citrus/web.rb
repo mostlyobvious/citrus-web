@@ -1,6 +1,6 @@
 require 'citrus/core'
 require 'webmachine'
-require 'webmachine/adapters/rack'
+require 'm2r_adapter'
 require 'thread'
 require 'dependor'
 require 'dependor/shorty'

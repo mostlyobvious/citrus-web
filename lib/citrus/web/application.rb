@@ -1,3 +1,5 @@
+require 'm2r_adapter'
+
 module Citrus
   module Web
     class Application
@@ -17,7 +19,7 @@ module Citrus
         @webmachine ||= begin
           webmachine = Webmachine::Application.new
           webmachine.configure do |config|
-            config.adapter = :Rack
+            config.adapter = :M2R
           end
           webmachine.routes do
             add ['github_push'], GithubPushResource
@@ -29,12 +31,9 @@ module Citrus
         end
       end
 
-      def rack_application
-        webmachine.adapter
-      end
-
       def start
         build_executor.start
+        webmachine.run
       end
 
       protected
