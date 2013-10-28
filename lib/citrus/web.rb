@@ -1,9 +1,9 @@
 require 'citrus/core'
 require 'webmachine'
-require 'm2r_adapter'
 require 'thread'
 require 'dependor'
 require 'dependor/shorty'
+require 'm2r_adapter'
 
 module Citrus
   module Web

@@ -1,5 +1,3 @@
-require 'm2r_adapter'
-
 module Citrus
   module Web
     class Application
