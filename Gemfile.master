@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gemspec
+
+gem 'citrus-core', github: 'pawelpacana/citrus-core'
+gem 'm2r',         github: 'perplexes/m2r'
