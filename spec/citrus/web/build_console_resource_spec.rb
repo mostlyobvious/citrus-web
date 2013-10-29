@@ -5,13 +5,13 @@ describe Citrus::Web::BuildConsoleResource do
 
   let(:builds_repository) { fake(:builds_repository) }
   let(:build)             { fake(:build, output: output) { Citrus::Core::Build } }
-  let(:output)            { fake(:file_output, path: file.path) }
-  let(:file)              { Tempfile.new('file_output') }
+  let(:output)            { fake(:test_output, read: '') { Citrus::Core::TestOutput } }
+  let(:subscribe_console) { fake(:subscribe_console) }
 
   before do
     stub(injector).builds_repository { builds_repository }
     stub(injector).configuration     { configuration }
-    stub(configuration).streamer_url { streamer_url  }
+    stub(injector).subscribe_console { subscribe_console}
   end
 
   context 'GET /builds/:build_id/console' do
@@ -19,8 +19,21 @@ describe Citrus::Web::BuildConsoleResource do
       before  { stub(builds_repository).find_by_uuid('1') { build } }
       subject { get '/builds/1/console' }
 
-      specify { expect(subject.code).to                 eq(301) }
-      specify { expect(subject.headers['Location']).to  eq(streamer_url) }
+      specify { expect(subject.code).to                         eq(200) }
+      specify { expect(subject.headers['Content-Type']).to      eq('text/event-stream') }
+      specify { expect(subject.headers['Connection']).to        eq('keep-alive') }
+      specify { expect(subject.headers['Cache-Control']).to     eq('no-cache') }
+      specify { expect(subject.headers['Transfer-Encoding']).to eq('identity') }
+
+      it 'should dump existing output data' do
+        stub(output).read { 'kaka' }
+        expect(subject.body).to eq("data: kaka\n\n")
+      end
+
+      it 'should subscribe client for streaming handled by other party' do
+        get '/builds/1/console', headers: {'X-Mongrel2-Connection-Id' => 'abc'}
+        expect(subscribe_console).to have_received.call('1', 'abc')
+      end
     end
 
     context 'build does not exist' do
