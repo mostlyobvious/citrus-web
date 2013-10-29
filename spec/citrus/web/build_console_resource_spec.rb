@@ -10,7 +10,6 @@ describe Citrus::Web::BuildConsoleResource do
 
   before do
     stub(injector).builds_repository { builds_repository }
-    stub(injector).configuration     { configuration }
     stub(injector).subscribe_console { subscribe_console}
   end
 
