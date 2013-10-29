@@ -4,22 +4,29 @@ module Citrus
   module Web
     class EventBusResource < Resource
 
-      inject :configuration
+      inject :subscribe_events
+
+      def initialize
+        response.headers['Connection']        ||= 'keep-alive'
+        response.headers['Cache-Control']     ||= 'no-cache'
+        response.headers['Transfer-Encoding'] ||= 'identity'
+      end
 
       def allowed_methods
         %w(GET)
       end
 
       def content_types_provided
-        [['text/html', :render_html]]
+        [['text/event-stream', :render_event]]
       end
 
-      def render_html
-        301
+      def render_event
+        subscribe_events.(client_id)
+        200
       end
 
-      def finish_request
-        response.headers['Location'] = configuration.streamer_url
+      def client_id
+        request.headers['X-Mongrel2-Connection-Id']
       end
 
     end

@@ -2,7 +2,7 @@ module Citrus
   module Web
     class BuildConsoleResource < Resource
 
-      inject :builds_repository, :configuration, :subscribe_console
+      inject :builds_repository, :subscribe_console
 
       def initialize
         response.headers['Connection']        ||= 'keep-alive'

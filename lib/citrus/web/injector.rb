@@ -23,6 +23,7 @@ module Citrus
       let(:event_subscriber)     { EventSubscriber.new(publish_events, clock) }
       let(:clock)                { Clock.new }
       let(:subscribe_console)    { SubscribeConsole.new(pubsub_publisher) }
+      let(:subscribe_events)     { SubscribeEvents.new(pubsub_publisher) }
 
       def pubsub_serializer
         JSON
