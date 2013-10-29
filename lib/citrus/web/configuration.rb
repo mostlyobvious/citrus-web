@@ -14,8 +14,16 @@ module Citrus
         File.join(root, 'builds')
       end
 
-      def pubsub_address
-        'ipc:///tmp/citrus_pubsub.ipc'
+      def event_pubsub_address
+        'ipc:///tmp/citrus_event_pubsub.ipc'
+      end
+
+      def subscription_pubsub_address
+        'ipc:///tmp/citrus_subscription_pubsub.ipc'
+      end
+
+      def build_console_pubsub_address
+        'ipc:///tmp/citrus_build_console_pubsub.ipc'
       end
 
     end
