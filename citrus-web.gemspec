@@ -20,12 +20,11 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "citrus-core", "~> 0.0.4"
   spec.add_dependency "webmachine",  "~> 1.2.1"
-  spec.add_dependency "puma",        "~> 2.0"
   spec.add_dependency "rb-kqueue",   "~> 0.2.0"
   spec.add_dependency "rb-inotify",  "~> 0.9.0"
   spec.add_dependency "dependor",    "~> 1.0"
-  spec.add_dependency "ffi-rzmq",    "~> 1.0.3"
-  spec.add_dependency "m2r",         "~> 2.1.0.pre"
+  spec.add_dependency "ffi-rzmq",    "~> 1.0"
+  spec.add_dependency "m2r",         "~> 2.1"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
