@@ -3,6 +3,7 @@ require 'webmachine'
 require 'thread'
 require 'dependor'
 require 'dependor/shorty'
+require 'core_ext'
 require 'm2r_adapter'
 
 module Citrus
