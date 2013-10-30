@@ -2,6 +2,7 @@ require 'm2r'
 require 'm2r/version'
 require 'ostruct'
 require 'uri'
+require 'webmachine/chunked_body'
 
 module Webmachine
   module Adapters
@@ -80,6 +81,7 @@ module Webmachine
           body    = RequestBody.new(m2r_request)
           uri     = request_uri(m2r_request.path, m2r_request.headers)
           headers = Webmachine::Headers[m2r_request.headers.map { |k, v| [k, v] }]
+          headers['X-Mongrel2-Connection-Id'] = m2r_request.conn_id
           Webmachine::Request.new(method, uri, headers, body)
         end
 
