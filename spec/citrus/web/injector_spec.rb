@@ -28,10 +28,13 @@ describe Citrus::Web::Injector do
     specify { expect{injector.event_pubsub_publisher}.to_not         raise_error }
     specify { expect{injector.build_console_pubsub_publisher}.to_not raise_error }
     specify { expect{injector.publish_events}.to_not                 raise_error }
+    specify { expect{injector.publish_console}.to_not                raise_error }
     specify { expect{injector.event_presenter}.to_not                raise_error }
     specify { expect{injector.clock}.to_not                          raise_error }
     specify { expect{injector.subscribe_console}.to_not              raise_error }
     specify { expect{injector.subscribe_events}.to_not               raise_error }
+    specify { expect{injector.event_subscriber }.to_not              raise_error }
+    specify { expect{injector.build_console_subscriber }.to_not      raise_error }
   end
 
   it 'should wire event_subscriber to execute_build instances' do
@@ -41,8 +44,19 @@ describe Citrus::Web::Injector do
     stub(Citrus::Core::ExecuteBuild).new(any_args) { execute_build }
     stub(injector).event_subscriber                { event_subscriber }
 
-    injector.execute_build.inspect
+    injector.execute_build
     expect(execute_build).to have_received.add_subscriber(event_subscriber)
+  end
+
+  it 'should wire build_console_subscriber to test_runner instance' do
+    build_console_subscriber = fake(:build_console_subscriber)
+    test_runner              = fake(:test_runner) { Citrus::Core::TestRunner }
+
+    stub(Citrus::Core::TestRunner).new(any_args) { test_runner }
+    stub(injector).build_console_subscriber      { build_console_subscriber }
+
+    injector.test_runner
+    expect(test_runner).to have_received.add_subscriber(build_console_subscriber)
   end
 
 end
