@@ -9,8 +9,9 @@ module Webmachine
     class M2R < Adapter
 
       def run
-        connection = ::M2R::ConnectionFactory.new(OpenStruct.new(adapter_options)).connection
-        @handler = Handler.new(connection, @dispatcher)
+        connection_options = OpenStruct.new(adapter_options.slice(:sender_id, :recv_addr, :send_addr))
+        connection = ::M2R::ConnectionFactory.new(connection_options).connection
+        @handler = Handler.new(connection, @dispatcher, adapter_options[:on_disconnect])
         %w(INT TERM).map { |signal| trap(signal) { shutdown } }
         @handler.listen
       end
@@ -23,9 +24,10 @@ module Webmachine
 
       def adapter_defaults
         {
-          :sender_id => '8699e94e-ee48-4274-9461-5907fa0efc4a',
-          :recv_addr => 'tcp://127.0.0.1:1234',
-          :send_addr => 'tcp://127.0.0.1:4321'
+          :sender_id     => '8699e94e-ee48-4274-9461-5907fa0efc4a',
+          :recv_addr     => 'tcp://127.0.0.1:1234',
+          :send_addr     => 'tcp://127.0.0.1:4321',
+          :on_disconnect => Proc.new { }
         }
       end
 
@@ -35,13 +37,14 @@ module Webmachine
 
       class Handler
 
-        attr_reader :wm_dispatcher, :adapter_options, :request_parser, :poller, :connection
+        attr_reader :wm_dispatcher, :adapter_options, :request_parser, :poller, :connection, :on_disconnect
 
-        def initialize(connection, wm_dispatcher, request_parser = ::M2R::Parser.new, poller = ZMQ::Poller.new)
+        def initialize(connection, wm_dispatcher, on_disconnect, request_parser = ::M2R::Parser.new, poller = ZMQ::Poller.new)
           @request_parser  = request_parser
           @wm_dispatcher   = wm_dispatcher
           @connection      = connection
           @poller          = poller
+          @on_disconnect   = on_disconnect
         end
 
         def listen
@@ -67,6 +70,8 @@ module Webmachine
         end
 
         def process(m2r_request)
+          return on_disconnect.call(m2r_request.conn_id) if m2r_request.disconnect?
+
           wm_request   = convert_request(m2r_request)
           wm_response  = Webmachine::Response.new
           wm_dispatcher.dispatch(wm_request, wm_response)
