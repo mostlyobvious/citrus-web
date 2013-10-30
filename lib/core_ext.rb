@@ -1,6 +1,6 @@
 class Hash
 
-  def slice(*keys)
+  def slice(*keep_keys)
     hash = {}
     keep_keys.each do |key|
       hash[key] = fetch(key) if key?(key)
