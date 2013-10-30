@@ -2,12 +2,13 @@ require 'spec_helper'
 
 describe Citrus::Web::Injector do
 
-  let(:injector)          { described_class.new(configuration, build_queue, builds_repository) }
-  let(:configuration)     { Citrus::Web::Configuration.new('/tmp/citrus', 'http://stream.citrus-ci.dev') }
-  let(:build_queue)       { fake(:queue) }
-  let(:builds_repository) { fake(:builds_repository) }
-  let(:zmq_context)       { fake(:context) { ZMQ::Context } }
-  let(:zmq_socket)        { fake(:socket)  { ZMQ::Socket  } }
+  let(:injector)                 { described_class.new(configuration, build_queue, builds_repository, subscriptions_repository) }
+  let(:configuration)            { Citrus::Web::Configuration.new('/tmp/citrus', 'http://stream.citrus-ci.dev') }
+  let(:build_queue)              { fake(:queue) }
+  let(:builds_repository)        { fake(:builds_repository) }
+  let(:subscriptions_repository) { fake(:subscriptions_repository) }
+  let(:zmq_context)              { fake(:context) { ZMQ::Context } }
+  let(:zmq_socket)               { fake(:socket)  { ZMQ::Socket  } }
 
   before do
     stub(zmq_context).socket(any_args) { zmq_socket  }
@@ -35,6 +36,7 @@ describe Citrus::Web::Injector do
     specify { expect{injector.subscribe_events}.to_not               raise_error }
     specify { expect{injector.event_subscriber }.to_not              raise_error }
     specify { expect{injector.build_console_subscriber }.to_not      raise_error }
+    specify { expect{injector.unsubscribe_client }.to_not            raise_error }
   end
 
   it 'should wire event_subscriber to execute_build instances' do

@@ -6,7 +6,7 @@ module Citrus
     class Injector
       extend Dependor::Let
 
-      takes :configuration, :build_queue, :builds_repository
+      takes :configuration, :build_queue, :builds_repository, :subscriptions_repository
 
       let(:test_runner)                    { Core::TestRunner.new.tap { |tr| tr.add_subscriber(build_console_subscriber) } }
       let(:code_fetcher)                   { Core::CachedCodeFetcher.new(configuration.cache_root) }
@@ -30,6 +30,7 @@ module Citrus
       let(:subscription_pubsub_publisher)  { @subscription_pubsub_publisher  ||= ZmqPubsubAdapter::Publisher.new(configuration.subscription_pubsub_address, NullSerializer.new, zmq_context) }
       let(:event_pubsub_publisher)         { @event_pubsub_publisher         ||= ZmqPubsubAdapter::Publisher.new(configuration.event_pubsub_address, JSON, zmq_context) }
       let(:build_console_pubsub_publisher) { @build_console_pubsub_publisher ||= ZmqPubsubAdapter::Publisher.new(configuration.build_console_pubsub_address, NullSerializer.new, zmq_context) }
+      let(:unsubscribe_client)             { UnsubscribeClient.new(subscriptions_repository) }
 
     end
   end
