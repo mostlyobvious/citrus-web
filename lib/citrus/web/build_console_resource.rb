@@ -4,12 +4,6 @@ module Citrus
 
       inject :builds_repository, :subscribe_console
 
-      def initialize
-        response.headers['Connection']        ||= 'keep-alive'
-        response.headers['Cache-Control']     ||= 'no-cache'
-        response.headers['Transfer-Encoding'] ||= 'identity'
-      end
-
       def allowed_methods
         %w(GET)
       end
@@ -26,15 +20,12 @@ module Citrus
       end
 
       def render_event
-        build = builds_repository.find_by_uuid(build_id)
-        current_output = build.output.read
+        set_stream_headers
         subscribe_console.(build_id, client_id)
-        encode_sse(current_output)
+        200
       end
 
-      def encode_sse(data)
-        "data: #{data.strip}\n\n"
-      end
+      protected
 
       def build_id
         request.path_info[:build_id]
@@ -42,6 +33,12 @@ module Citrus
 
       def client_id
         request.headers['X-Mongrel2-Connection-Id']
+      end
+
+      def set_stream_headers
+        response.headers['Connection']        ||= 'keep-alive'
+        response.headers['Cache-Control']     ||= 'no-cache'
+        response.headers['Transfer-Encoding'] ||= 'identity'
       end
 
     end

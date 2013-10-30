@@ -18,16 +18,12 @@ describe Citrus::Web::BuildConsoleResource do
       before  { stub(builds_repository).find_by_uuid('1') { build } }
       subject { get '/builds/1/console' }
 
-      specify { expect(subject.code).to                         eq(200) }
-      specify { expect(subject.headers['Content-Type']).to      eq('text/event-stream') }
-      specify { expect(subject.headers['Connection']).to        eq('keep-alive') }
-      specify { expect(subject.headers['Cache-Control']).to     eq('no-cache') }
-      specify { expect(subject.headers['Transfer-Encoding']).to eq('identity') }
-
-      it 'should dump existing output data' do
-        stub(output).read { 'kaka' }
-        expect(subject.body).to eq("data: kaka\n\n")
-      end
+      specify { expect(subject.code).to                             eq(200) }
+      specify { expect(subject.headers['Content-Type']).to          eq('text/event-stream') }
+      specify { expect(subject.headers['Connection']).to            eq('keep-alive') }
+      specify { expect(subject.headers['Cache-Control']).to         eq('no-cache') }
+      specify { expect(subject.headers['Transfer-Encoding']).to_not eq('chunked') }
+      specify { expect(subject.headers['Content-Length']).to        be_nil }
 
       it 'should subscribe client for streaming handled by other party' do
         get '/builds/1/console', headers: {'X-Mongrel2-Connection-Id' => 'abc'}
