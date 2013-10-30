@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'support/null_serializer'
 
 describe Citrus::Web::ZmqPubsubAdapter::Publisher do
 
@@ -9,7 +8,7 @@ describe Citrus::Web::ZmqPubsubAdapter::Publisher do
     s.connect(address)
     s.setsockopt(::ZMQ::LINGER, 100) } }
   let(:zmq_context) { ZMQ::Context.new.tap { |ctx| ctx.send(:remove_finalizer) } }
-  let(:serializer)  { NullSerializer.new }
+  let(:serializer)  { Citrus::Web::NullSerializer.new }
 
   before  { workaround_for_inproc_bind_first_on_zmq_before_4_0_1 }
 
