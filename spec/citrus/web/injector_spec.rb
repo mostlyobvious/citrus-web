@@ -37,6 +37,7 @@ describe Citrus::Web::Injector do
     specify { expect{injector.event_subscriber }.to_not              raise_error }
     specify { expect{injector.build_console_subscriber }.to_not      raise_error }
     specify { expect{injector.unsubscribe_client }.to_not            raise_error }
+    specify { expect{injector.subscribe_client }.to_not              raise_error }
   end
 
   it 'should wire event_subscriber to execute_build instances' do

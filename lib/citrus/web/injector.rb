@@ -31,6 +31,7 @@ module Citrus
       let(:event_pubsub_publisher)         { @event_pubsub_publisher         ||= ZmqPubsubAdapter::Publisher.new(configuration.event_pubsub_address, JSON, zmq_context) }
       let(:build_console_pubsub_publisher) { @build_console_pubsub_publisher ||= ZmqPubsubAdapter::Publisher.new(configuration.build_console_pubsub_address, NullSerializer.new, zmq_context) }
       let(:unsubscribe_client)             { UnsubscribeClient.new(subscriptions_repository) }
+      let(:subscribe_client)               { SubscribeClient.new(subscriptions_repository) }
 
     end
   end

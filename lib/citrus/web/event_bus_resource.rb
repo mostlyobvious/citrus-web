@@ -4,7 +4,7 @@ module Citrus
   module Web
     class EventBusResource < Resource
 
-      inject :subscribe_events
+      inject :subscribe_client
 
       def allowed_methods
         %w(GET)
@@ -16,7 +16,7 @@ module Citrus
 
       def render_event
         set_stream_headers
-        subscribe_events.(client_id)
+        subscribe_client.(client_id, 'events')
         200
       end
 

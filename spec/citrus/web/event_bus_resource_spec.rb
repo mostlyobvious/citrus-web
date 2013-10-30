@@ -2,10 +2,12 @@ require 'spec_helper'
 
 describe Citrus::Web::EventBusResource do
 
-  let(:subscribe_events) { fake(:subscribe_events) }
+  let(:subscribe_client)     { fake(:subscribe_client) }
+  let(:subscription_subject) { 'events' }
+  let(:client_id)            { '1337' }
 
   before do
-    stub(injector).subscribe_events { subscribe_events }
+    stub(injector).subscribe_client { subscribe_client }
   end
 
   context 'GET /events' do
@@ -19,8 +21,8 @@ describe Citrus::Web::EventBusResource do
     specify { expect(subject.headers['Content-Length']).to        be_nil }
 
     it 'should subscribe client for streaming handled by other party' do
-      get '/events', headers: {'X-Mongrel2-Connection-Id' => 'abc'}
-      expect(subscribe_events).to have_received.call('abc')
+      get '/events', headers: { 'X-Mongrel2-Connection-Id' => client_id }
+      expect(subscribe_client).to have_received.call(client_id, subscription_subject)
     end
   end
 
