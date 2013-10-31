@@ -28,8 +28,10 @@ module Citrus
       let(:subscribe_client)               { SubscribeClient.new(subscriptions_repository) }
       let(:streamer)                       { Streamer.new(configuration, subscriptions_repository, sse_encoder, zmq_context) }
       let(:sse_encoder)                    { ServerSentEventsEncoder.new }
-      let(:event_publisher)                { ZmqPubsubAdapter::Publisher.new(configuration.event_pubsub_address, JSON, zmq_context) }
-      let(:build_console_publisher)        { ZmqPubsubAdapter::Publisher.new(configuration.build_console_pubsub_address, NullSerializer.new, zmq_context) }
+      let(:event_publisher)                { ZmqPubsubAdapter::Publisher.new(configuration.event_pubsub_address, json_serializer, zmq_context) }
+      let(:build_console_publisher)        { ZmqPubsubAdapter::Publisher.new(configuration.build_console_pubsub_address, null_serializer, zmq_context) }
+      let(:json_serializer)                { JSON }
+      let(:null_serializer)                { NullSerializer.new }
 
     end
   end
