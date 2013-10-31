@@ -19,7 +19,8 @@ module Citrus
       let(:create_build)                   { CreateBuild.new(builds_repository, build_queue) }
       let(:publish_events)                 { PublishEvents.new(event_publisher, event_presenter) }
       let(:publish_console)                { PublishConsole.new(build_console_publisher) }
-      let(:event_presenter)                { EventPresenter.new }
+      let(:event_presenter)                { EventPresenter.new(build_presenter) }
+      let(:build_presenter)                { BuildPresenter.new }
       let(:event_subscriber)               { EventSubscriber.new(publish_events, clock) }
       let(:build_console_subscriber)       { BuildConsoleSubscriber.new(publish_console) }
       let(:clock)                          { Clock.new }

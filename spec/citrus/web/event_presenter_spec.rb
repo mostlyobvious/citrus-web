@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe Citrus::Web::EventPresenter do
 
-  let(:event_presenter) { described_class.new }
+  let(:event_presenter) { described_class.new(build_presenter) }
+  let(:build_presenter) { Citrus::Web::BuildPresenter.new }
   let(:event)           { Citrus::Web::Event.new(kind, timestamp, build) }
   let(:timestamp)       { Time.at(0).utc }
   let(:kind)            { :build_started }
