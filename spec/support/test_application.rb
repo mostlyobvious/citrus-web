@@ -7,7 +7,7 @@ module Citrus
       include Webmachine::Test
 
       def app
-        webmachine = Application.new(configuration).webmachine
+        webmachine = Application.new(configuration, zmq_context).webmachine
         webmachine.dispatcher.resource_creator = ResourceCreator.new(injector)
         webmachine
       end
@@ -18,6 +18,10 @@ module Citrus
 
       def injector
         @injector ||= fake(:injector)
+      end
+
+      def zmq_context
+        @zmq_context||= ZMQ::Context.new
       end
 
     end

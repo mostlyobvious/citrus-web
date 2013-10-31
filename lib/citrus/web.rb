@@ -4,6 +4,7 @@ require 'thread'
 require 'dependor'
 require 'dependor/shorty'
 require 'core_ext'
+require 'tnetstring'
 require 'm2r_adapter'
 
 module Citrus
@@ -46,3 +47,5 @@ require 'citrus/web/subscriptions_repository'
 require 'citrus/web/unsubscribe_client'
 require 'citrus/web/subscription'
 require 'citrus/web/subscribe_client'
+require 'citrus/web/streamer'
+require 'citrus/web/server_sent_events_encoder'

@@ -10,7 +10,7 @@ describe Citrus::Web::EventSubscriber do
   let(:event)            { fake(:event) }
   let(:time)             { Time.new }
   let(:error)            { Exception.new }
-  let(:subject)          { 'event' }
+  let(:subject)          { 'events' }
 
   specify { expect(event_subscriber).to respond_to(:build_succeeded) }
   specify { expect(event_subscriber).to respond_to(:build_failed) }

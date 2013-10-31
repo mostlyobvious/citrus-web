@@ -2,18 +2,13 @@ require 'spec_helper'
 
 describe Citrus::Web::Injector do
 
-  let(:injector)                 { described_class.new(configuration, build_queue, builds_repository, subscriptions_repository) }
+  let(:injector)                 { described_class.new(configuration, build_queue, builds_repository, subscriptions_repository, zmq_context) }
   let(:configuration)            { Citrus::Web::Configuration.new('/tmp/citrus') }
   let(:build_queue)              { fake(:queue) }
   let(:builds_repository)        { fake(:builds_repository) }
   let(:subscriptions_repository) { fake(:subscriptions_repository) }
-  let(:zmq_context)              { fake(:context) { ZMQ::Context } }
-  let(:zmq_socket)               { fake(:socket)  { ZMQ::Socket  } }
-
-  before do
-    stub(zmq_context).socket(any_args) { zmq_socket  }
-    stub(injector).zmq_context         { zmq_context }
-  end
+  let(:zmq_context)              { fake(:context, socket: zmq_socket) { ZMQ::Context } }
+  let(:zmq_socket)               { fake(:socket)                      { ZMQ::Socket } }
 
   context 'it should be able to create injected objects instances' do
     specify { expect{injector.test_runner}.to_not                    raise_error }
@@ -25,8 +20,6 @@ describe Citrus::Web::Injector do
     specify { expect{injector.resource_creator}.to_not               raise_error }
     specify { expect{injector.github_adapter}.to_not                 raise_error }
     specify { expect{injector.create_build}.to_not                   raise_error }
-    specify { expect{injector.event_pubsub_publisher}.to_not         raise_error }
-    specify { expect{injector.build_console_pubsub_publisher}.to_not raise_error }
     specify { expect{injector.publish_events}.to_not                 raise_error }
     specify { expect{injector.publish_console}.to_not                raise_error }
     specify { expect{injector.event_presenter}.to_not                raise_error }
@@ -35,6 +28,10 @@ describe Citrus::Web::Injector do
     specify { expect{injector.build_console_subscriber }.to_not      raise_error }
     specify { expect{injector.unsubscribe_client }.to_not            raise_error }
     specify { expect{injector.subscribe_client }.to_not              raise_error }
+    specify { expect{injector.streamer }.to_not                      raise_error }
+    specify { expect{injector.sse_encoder }.to_not                   raise_error }
+    specify { expect{injector.build_console_publisher }.to_not       raise_error }
+    specify { expect{injector.event_publisher }.to_not               raise_error }
   end
 
   it 'should wire event_subscriber to execute_build instances' do

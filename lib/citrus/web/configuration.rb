@@ -22,6 +22,18 @@ module Citrus
         'ipc:///tmp/citrus_build_console_pubsub.ipc'
       end
 
+      def mongrel_receive_address
+        'tcp://127.0.0.1:1234'
+      end
+
+      def mongrel_send_address
+        'tcp://127.0.0.1:4321'
+      end
+
+      def mongrel_uuid
+        '8699e94e-ee48-4274-9461-5907fa0efc4a'
+      end
+
     end
   end
 end

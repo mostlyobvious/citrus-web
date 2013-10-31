@@ -4,7 +4,7 @@ module Citrus
 
       takes :execute_build, :build_queue
 
-      def start(concurrency = 1)
+      def run(concurrency = 1)
         concurrency.times do
           worker_thread = Thread.new do
             loop { execute_build.(build_queue.pop) }
