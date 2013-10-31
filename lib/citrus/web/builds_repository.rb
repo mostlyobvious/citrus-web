@@ -25,6 +25,10 @@ module Citrus
         builds[uuid]
       end
 
+      def find_all
+        @builds.values
+      end
+
     end
   end
 end

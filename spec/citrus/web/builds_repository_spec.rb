@@ -20,4 +20,11 @@ describe Citrus::Web::BuildsRepository do
     specify { expect(builds_repository.find_by_uuid(build.uuid)).to eq(build) }
   end
 
+  context '#find_all' do
+    let(:build) { builds_repository.create_build(changeset, output) }
+
+    before  { build }
+    specify { expect(builds_repository.find_all).to eq([build]) }
+  end
+
 end
