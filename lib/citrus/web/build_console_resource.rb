@@ -2,7 +2,7 @@ module Citrus
   module Web
     class BuildConsoleResource < Resource
 
-      inject :builds_repository, :subscribe_client
+      inject :builds_repository, :subscribe_client, :sse_encoder
 
       def allowed_methods
         %w(GET)
@@ -23,7 +23,7 @@ module Citrus
         set_stream_headers
         subscribe_client.(client_id, build_id)
         build = builds_repository.find_by_uuid(build_id)
-        encode_sse(build.output.read)
+        sse_encoder.(build.output.read)
       end
 
       def finish_request
@@ -44,10 +44,6 @@ module Citrus
         response.headers['Connection']        ||= 'keep-alive'
         response.headers['Cache-Control']     ||= 'no-cache'
         response.headers['Transfer-Encoding'] ||= 'identity'
-      end
-
-      def encode_sse(data)
-        "data: #{data.strip}\n\n"
       end
 
     end

@@ -6,10 +6,12 @@ describe Citrus::Web::BuildConsoleResource do
   let(:build)             { fake(:build, output: output) { Citrus::Core::Build } }
   let(:output)            { fake(:test_output, read: '') { Citrus::Core::TestOutput } }
   let(:subscribe_client)  { fake(:subscribe_client) }
+  let(:sse_encoder)       { Citrus::Web::ServerSentEventsEncoder.new }
 
   before do
     stub(injector).builds_repository { builds_repository }
     stub(injector).subscribe_client  { subscribe_client  }
+    stub(injector).sse_encoder       { sse_encoder }
   end
 
   context 'GET /builds/:build_id/console' do
