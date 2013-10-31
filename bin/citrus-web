@@ -2,8 +2,7 @@
 
 require 'citrus/web'
 
-citrus_root   = ENV['CITRUS_ROOT']         || '/tmp/citrus'
-streamer_url  = ENV['CITRUS_STREAMER_URL'] || 'http://127.0.0.1:9090'
-configuration = Citrus::Web::Configuration.new(citrus_root, streamer_url)
+citrus_root   = ENV['CITRUS_ROOT'] || '/tmp/citrus'
+configuration = Citrus::Web::Configuration.new(citrus_root)
 application   = Citrus::Web::Application.new(configuration)
 application.start

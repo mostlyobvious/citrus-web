@@ -13,15 +13,11 @@ module Citrus
       end
 
       def configuration
-        @configuration ||= Configuration.new(Dir.mktmpdir('citrus'), streamer_url)
+        @configuration ||= Configuration.new(Dir.mktmpdir('citrus'))
       end
 
       def injector
         @injector ||= fake(:injector)
-      end
-
-      def streamer_url
-        'http://stream.citrus-ci.dev'
       end
 
     end

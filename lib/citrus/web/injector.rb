@@ -23,15 +23,19 @@ module Citrus
       let(:event_subscriber)               { EventSubscriber.new(publish_events, clock) }
       let(:build_console_subscriber)       { BuildConsoleSubscriber.new(publish_console) }
       let(:clock)                          { Clock.new }
-      let(:subscribe_console)              { SubscribeConsole.new(subscription_pubsub_publisher) }
-      let(:subscribe_events)               { SubscribeEvents.new(subscription_pubsub_publisher) }
-      let(:pubsub_serializer)              { JSON }
-      let(:zmq_context)                    { @zmq_context ||= ZMQ::Context.new }
-      let(:subscription_pubsub_publisher)  { @subscription_pubsub_publisher  ||= ZmqPubsubAdapter::Publisher.new(configuration.subscription_pubsub_address, NullSerializer.new, zmq_context) }
-      let(:event_pubsub_publisher)         { @event_pubsub_publisher         ||= ZmqPubsubAdapter::Publisher.new(configuration.event_pubsub_address, JSON, zmq_context) }
-      let(:build_console_pubsub_publisher) { @build_console_pubsub_publisher ||= ZmqPubsubAdapter::Publisher.new(configuration.build_console_pubsub_address, NullSerializer.new, zmq_context) }
+      let(:event_serializer)               { JSON }
+      let(:console_serializer)             { NullSerializer.new }
+      let(:zmq_context)                    { memoize(ZMQ::Context.new) }
+      let(:event_pubsub_publisher)         { memoize(ZmqPubsubAdapter::Publisher.new(configuration.event_pubsub_address, event_serializer, zmq_context)) }
+      let(:build_console_pubsub_publisher) { memoize(ZmqPubsubAdapter::Publisher.new(configuration.build_console_pubsub_address, console_serializer, zmq_context)) }
       let(:unsubscribe_client)             { UnsubscribeClient.new(subscriptions_repository) }
       let(:subscribe_client)               { SubscribeClient.new(subscriptions_repository) }
+
+      protected
+
+      def memoize(instance)
+        instance_variable_get("@#{__method__}") || instance_variable_set("@#{__method__}", instance)
+      end
 
     end
   end

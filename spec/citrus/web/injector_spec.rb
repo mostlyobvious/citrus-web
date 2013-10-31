@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Citrus::Web::Injector do
 
   let(:injector)                 { described_class.new(configuration, build_queue, builds_repository, subscriptions_repository) }
-  let(:configuration)            { Citrus::Web::Configuration.new('/tmp/citrus', 'http://stream.citrus-ci.dev') }
+  let(:configuration)            { Citrus::Web::Configuration.new('/tmp/citrus') }
   let(:build_queue)              { fake(:queue) }
   let(:builds_repository)        { fake(:builds_repository) }
   let(:subscriptions_repository) { fake(:subscriptions_repository) }
@@ -25,15 +25,12 @@ describe Citrus::Web::Injector do
     specify { expect{injector.resource_creator}.to_not               raise_error }
     specify { expect{injector.github_adapter}.to_not                 raise_error }
     specify { expect{injector.create_build}.to_not                   raise_error }
-    specify { expect{injector.subscription_pubsub_publisher}.to_not  raise_error }
     specify { expect{injector.event_pubsub_publisher}.to_not         raise_error }
     specify { expect{injector.build_console_pubsub_publisher}.to_not raise_error }
     specify { expect{injector.publish_events}.to_not                 raise_error }
     specify { expect{injector.publish_console}.to_not                raise_error }
     specify { expect{injector.event_presenter}.to_not                raise_error }
     specify { expect{injector.clock}.to_not                          raise_error }
-    specify { expect{injector.subscribe_console}.to_not              raise_error }
-    specify { expect{injector.subscribe_events}.to_not               raise_error }
     specify { expect{injector.event_subscriber }.to_not              raise_error }
     specify { expect{injector.build_console_subscriber }.to_not      raise_error }
     specify { expect{injector.unsubscribe_client }.to_not            raise_error }
