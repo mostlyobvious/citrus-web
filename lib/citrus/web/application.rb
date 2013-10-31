@@ -26,6 +26,7 @@ module Citrus
           webmachine.routes do
             add ['github_push'], GithubPushResource
             add ['builds', :build_id, 'console'], BuildConsoleResource
+            add ['builds', :build_id], BuildResource
             add ['builds'], BuildCollectionResource
             add ['events'], EventBusResource
           end
