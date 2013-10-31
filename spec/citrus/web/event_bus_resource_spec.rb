@@ -18,7 +18,7 @@ describe Citrus::Web::EventBusResource do
     specify { expect(subject.headers['Connection']).to            eq('keep-alive') }
     specify { expect(subject.headers['Cache-Control']).to         eq('no-cache') }
     specify { expect(subject.headers['Transfer-Encoding']).to_not eq('chunked') }
-    specify { expect(subject.headers['Content-Length']).to        be_nil }
+    specify { expect(subject.headers).to_not                      have_key('Content-Length') }
 
     it 'should subscribe client for streaming handled by other party' do
       get '/events', headers: { 'X-Mongrel2-Connection-Id' => client_id }

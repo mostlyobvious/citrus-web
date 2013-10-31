@@ -1,16 +1,15 @@
 require 'spec_helper'
 
 describe Citrus::Web::BuildConsoleResource do
-  ENOUGH_TIME_FOR_FIBER_ENCODER_TO_BLOCK = 0.125
 
   let(:builds_repository) { fake(:builds_repository) }
   let(:build)             { fake(:build, output: output) { Citrus::Core::Build } }
   let(:output)            { fake(:test_output, read: '') { Citrus::Core::TestOutput } }
-  let(:subscribe_console) { fake(:subscribe_console) }
+  let(:subscribe_client)  { fake(:subscribe_client) }
 
   before do
     stub(injector).builds_repository { builds_repository }
-    stub(injector).subscribe_console { subscribe_console}
+    stub(injector).subscribe_client  { subscribe_client  }
   end
 
   context 'GET /builds/:build_id/console' do
@@ -23,11 +22,16 @@ describe Citrus::Web::BuildConsoleResource do
       specify { expect(subject.headers['Connection']).to            eq('keep-alive') }
       specify { expect(subject.headers['Cache-Control']).to         eq('no-cache') }
       specify { expect(subject.headers['Transfer-Encoding']).to_not eq('chunked') }
-      specify { expect(subject.headers['Content-Length']).to        be_nil }
+      specify { expect(subject.headers).to_not                      have_key('Content-Lenght') }
 
       it 'should subscribe client for streaming handled by other party' do
-        get '/builds/1/console', headers: {'X-Mongrel2-Connection-Id' => 'abc'}
-        expect(subscribe_console).to have_received.call('1', 'abc')
+        get '/builds/1/console', headers: {'X-Mongrel2-Connection-Id' => '1337'}
+        expect(subscribe_client).to have_received.call('1337', '1')
+      end
+
+      it 'should dump existing output data' do
+        stub(output).read { 'kaka' }
+        expect(subject.body).to eq("data: kaka\n\n")
       end
     end
 
