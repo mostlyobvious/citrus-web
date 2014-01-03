@@ -20,6 +20,8 @@ module Citrus
       end
 
       def render_event
+        response.headers['Access-Control-Allow-Origin'] = '*'
+
         set_stream_headers
         subscribe_client.(client_id, build_id)
         build = builds_repository.find_by_uuid(build_id)
